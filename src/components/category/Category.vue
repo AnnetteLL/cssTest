@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-menu
-      default-active="1"
+      :default-active="defaultActive"
       class="el-menu-vertical-demo"
       @select="clickPush"
       background-color="#545c64"
@@ -46,8 +46,28 @@ export default {
       ]
     }
   },
+  computed: {
+    defaultActive() {
+      var active = '';
+      this.menuList.map((item) => {
+        if(item.url == this.$route.path) {
+          active = item.index
+        } else {
+          if(item.children){
+            item.children.map((Item) => {
+              if(Item.url == this.$route.path){
+                active = Item.index
+              }
+            })
+          }
+        }
+      })
+      return active
+    }
+  },
   methods: {
     clickPush(key, keyPath){
+      console.log(this.$route.path);
       var link = '';
       if(keyPath[1]){
         link = this.menuList[keyPath[0]-1].children[key.indexOf('-')-1].url;
